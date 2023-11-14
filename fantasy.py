@@ -28,9 +28,13 @@ my_team = lg.to_team(teamkey)
 # get team roster
 my_roster = my_team.roster()
 
+
 def get_matchups_scores_by_week(week=None):
+    matchups_result = [["Week", "Name", "FG%", "FT%", "3PTM", "PTS", "REB", "AST", "ST", "BLK", "TO"]]
     
     # get matchups data for a given week, defaults to current week.
+    if week == None:
+        week = lg.current_week()-1
     matchups_obj = lg.matchups(week)
     matchups_contents = matchups_obj["fantasy_content"]["league"]
     matchups_scoreboards = matchups_contents[1]["scoreboard"]["0"]["matchups"] # matchups_scoreboards={'0': data of first match, '1': data of second match, ..., 'count':6}
@@ -45,10 +49,14 @@ def get_matchups_scores_by_week(week=None):
 
         # delete the 'count' from the matchup_teams_data
         del matchup_teams_data['count']
+        
         for team_data in matchup_teams_data.values():
+            team_result = []
             team_data = team_data["team"]
-            team_name = team_data[0][2]
-            print(team_name)
+            team_name = team_data[0][2]['name']
+            # print(team_name)
+            team_result.append(week)
+            team_result.append(team_name)
             team_stats = team_data[1]["team_stats"]['stats']
             
             # iterate team_stats to get the data of each cat
@@ -59,9 +67,16 @@ def get_matchups_scores_by_week(week=None):
                 # skip FGM/A & FTM/A
                 if team_stat_id in skip_stat_id_set:
                     continue
-                print(team_stat_id, cat_val)
+                team_result.append(cat_val)
+                # print(cat_val)
+            matchups_result.append(team_result)
+    
+    with open('matchups.csv', 'w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerows(matchups_result)
 
-# get final matchups scores for a given week, defaults to current week.
+
+# get final matchups scores for a given week, default to the latest finished week.
 get_matchups_scores_by_week()
 
 '''
