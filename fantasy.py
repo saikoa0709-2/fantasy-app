@@ -4,32 +4,7 @@ import yahoo_fantasy_api as yfa
 import csv
 
 
-# global var
-skip_stat_id_set = {'9004003','9007006'}
-
-# connect to yahoo api
-sc = OAuth2(None, None, from_file='oauth2.json')
-
-# get game object
-gm = yfa.Game(sc, 'nba')
-leagues = gm.league_ids()
-
-# get the league object
-lg = gm.to_league('428.l.117327')
-
-# get the team key for logged in users
-teamkey = lg.team_key()
-all_teams = lg.teams()
-all_keys = all_teams.keys()
-
-# get the team object
-my_team = lg.to_team(teamkey)
-
-# get team roster
-my_roster = my_team.roster()
-
-
-def get_matchups_scores_by_week(week=None):
+def get_matchups_scores_by_week(week:int = None) -> None:
     matchups_result = [["Week", "Name", "FG%", "FT%", "3PTM", "PTS", "REB", "AST", "ST", "BLK", "TO"]]
     
     # get matchups data for a given week, defaults to current week.
@@ -76,7 +51,31 @@ def get_matchups_scores_by_week(week=None):
         writer.writerows(matchups_result)
 
 
-# get final matchups scores for a given week, default to the latest finished week.
+# global var
+skip_stat_id_set = {'9004003','9007006'}
+
+# connect to yahoo api
+sc = OAuth2(None, None, from_file='oauth2.json')
+
+# get game object
+gm = yfa.Game(sc, 'nba')
+leagues = gm.league_ids()
+
+# get the league object
+lg = gm.to_league('428.l.117327')
+
+# get the team key for logged in users
+teamkey = lg.team_key()
+all_teams = lg.teams()
+all_keys = all_teams.keys()
+
+# get the team object
+my_team = lg.to_team(teamkey)
+
+# get team roster
+my_roster = my_team.roster()
+
+# get final matchups scores for a given week and write to a csv file, default to the latest finished week.
 get_matchups_scores_by_week()
 
 '''
