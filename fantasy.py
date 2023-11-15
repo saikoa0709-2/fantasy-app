@@ -5,8 +5,9 @@ import csv
 
 
 def get_matchups_scores_by_week(week:int = None) -> None:
+    # initialized the headline of the csv file
     matchups_result = [["Week", "Name", "FG%", "FT%", "3PTM", "PTS", "REB", "AST", "ST", "BLK", "TO"]]
-    
+       
     # get matchups data for a given week, defaults to current week.
     if week == None:
         week = lg.current_week()-1
