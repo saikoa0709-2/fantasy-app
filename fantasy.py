@@ -4,12 +4,14 @@ import yahoo_fantasy_api as yfa
 import csv
 
 
-def get_matchups_scores_by_week(week:int = None) -> None:
-    # initialized the headline of the csv file
-    matchups_result = [["Week", "Name", "FG%", "FT%", "3PTM", "PTS", "REB", "AST", "ST", "BLK", "TO"]]
+def get_matchups_scores_by_week(week: int = None) -> None:
+    # initialize the headline of the csv file
+    matchups_header=["Week", "Name", "FG%", "FT%", "3PTM", "PTS", "REB", "AST", "ST", "BLK", "TO"]
+    matchups_result = []
+    matchups_result.append(matchups_header)
        
     # get matchups data for a given week, defaults to current week.
-    if week == None:
+    if not week:
         week = lg.current_week()-1
     matchups_obj = lg.matchups(week)
     matchups_contents = matchups_obj["fantasy_content"]["league"]
